@@ -149,7 +149,7 @@ class Workflow {
     const self = this;
     let urlParts, templateFile, requestFile;
     // Retrieve purchase request template from Drive
-    urlParts = self.configSheet.getRange('B2').getValue().split('/');
+    urlParts = self.configSheet.getRange(configRange).getValue().split('/');
     templateFile = DriveApp.getFileById(urlParts[urlParts.length - 2]);
     // Make a copy of the request template file and update new file name
     requestFile = templateFile.makeCopy();
