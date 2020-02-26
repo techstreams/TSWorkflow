@@ -85,7 +85,7 @@ class Workflow {
       requestFile.addViewers(viewers.emails).setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.VIEW);
     }
     // Update workflow request range in form submission sheet
-    workflow.updateWorkflowFields_(e.range.getRow(), [[requestFile.getUrl(), 'New', '', e.namedValues['Timestamp'][0]]]);
+    workflow.updateWorkflowFields_(e.range.getRow(), [[requestFile.getUrl(), 'New', '', workflow.getFormattedDate_(date, "M/d/yyyy k:mm:ss")]]);
     // Generate notification email body and send to requester/supervisor/business owner
     email = `New Purchase Request from: <strong>${viewers.requester.name}<\/strong><br><br>
     See request document <a href="${requestFile.getUrl()}">here<\/a>`;
