@@ -88,7 +88,7 @@ class Workflow {
     workflow.updateWorkflowFields_(e.range.getRow(), [[requestFile.getUrl(), 'New', '', workflow.getFormattedDate_(date, "M/d/yyyy k:mm:ss")]]);
     // Generate notification email body and send to requester/supervisor/business owner
     email = `New Purchase Request from: <strong>${viewers.requester.name}<\/strong><br><br>
-    See request document <a href="${requestFile.getUrl()}">here<\/a>`;
+    See request document <a href="${doc.getUrl()}">here<\/a>`;
     viewers.emails.push(Session.getEffectiveUser().getEmail());
     workflow.sendNotification_(viewers.emails, `New ${doc.getName()}`, email);
   }
