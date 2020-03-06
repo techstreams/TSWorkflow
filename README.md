@@ -13,7 +13,7 @@
 
 <br>
 
-> :point_right: See this **[blog post]()** for the **TSWorkflow overview** and **getting started guide**.
+> :point_right: See this **[blog post](https://medium.com/@techstreams/g-suite-business-solutions-apps-script-powered-workflow-automation-4cb715ea5d0b)** for the **TSWorkflow overview** and **getting started guide**.
 
 <br>
 
@@ -24,11 +24,11 @@
 
 ## Important Notes
 
-* TSWorkflow is meant to *demonstate* [G Suite](https://gsuite.google.com/) workflow automation with [Apps Script](https://developers.google.com/apps-script) and ***should not*** be deployed in a production environment without further development and test. 
+* TSWorkflow is meant to *demonstate* [G Suite](https://gsuite.google.com/) workflow automation with [Apps Script](https://developers.google.com/apps-script) and ***should not be deployed in a production environment*** without further development and testing. 
 
-* TSWorkflow demonstrates workflow automation with __Google Drive > My Drive__.  Code modifications are needed to enable its use with [Shared drives](https://support.google.com/a/answer/7212025?hl=en).
+* TSWorkflow uses __Google Drive > My Drive__.  Code modifications are needed to enable it to work with [Shared drives](https://support.google.com/a/answer/7212025?hl=en).
 
-* If TSWorkflow does not appear to be working correctly, check the [Apps Script Dashboard](https://script.google.com) for execution errors.
+* Check the [Apps Script Dashboard](https://script.google.com) for execution errors if TSWorkflow does not work as expected.
 
 ---
 
