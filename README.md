@@ -24,7 +24,7 @@
 
 ## Important Notes
 
-* TSWorkflow is meant to *demonstate* [G Suite](https://gsuite.google.com/) workflow automation with [Apps Script](https://developers.google.com/apps-script) and ***should not be deployed in a production environment*** without further development and testing. 
+* TSWorkflow is meant to *demonstate* [G Suite](https://gsuite.google.com/) workflow automation with [Apps Script](https://developers.google.com/apps-script) and **should not be deployed in a production environment** without further development and testing. 
 
 * TSWorkflow uses __Google Drive > My Drive__.  Code modifications are needed to enable it to work with [Shared drives](https://support.google.com/a/answer/7212025?hl=en).
 
