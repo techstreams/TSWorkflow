@@ -63,7 +63,7 @@ class Workflow {
   /* 
    * This static method generates a new purchase request document from a form submission, 
    * replaces template markers, shares document with requester/supervisor and sends email notification
-   * @param {Object} e - event object passed to onSubmit function
+   * @param {Object} e - event object passed to the form submit function
    */
   static generate(e) {
     const workflow = new Workflow();
@@ -86,7 +86,7 @@ class Workflow {
     }
     // Update workflow request range in form submission sheet
     workflow.updateWorkflowFields_(e.range.getRow(), [[requestFile.getUrl(), 'New', '', workflow.getFormattedDate_(date, "M/d/yyyy k:mm:ss")]]);
-    // Generate notification email body and send to requester/supervisor/business owner
+    // Generate notification email body and send to requester, supervisor and Sheet owner
     email = `New Purchase Request from: <strong>${viewers.requester.name}<\/strong><br><br>
     See request document <a href="${doc.getUrl()}">here<\/a>`;
     viewers.emails.push(Session.getEffectiveUser().getEmail());
