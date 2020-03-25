@@ -84,7 +84,7 @@ class Workflow {
     if (viewers.emails.length > 0) {
       requestFile.addViewers(viewers.emails).setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.VIEW);
     }
-    // Update workflow request range in form submission sheet
+    // Update workflow request range in form submission tab
     workflow.updateWorkflowFields_(e.range.getRow(), [[requestFile.getUrl(), 'New', '', workflow.getFormattedDate_(date, "M/d/yyyy k:mm:ss")]]);
     // Generate notification email body and send to requester, supervisor and Sheet owner
     email = `New Purchase Request from: <strong>${viewers.requester.name}<\/strong><br><br>
@@ -94,7 +94,7 @@ class Workflow {
   }
 
   /* 
-   * This static method adds additional fields and formatting to the form submission sheet
+   * This static method adds additional fields and formatting to the form submission tab
    * and sets up the form submit trigger
    * @param {string} triggerFunction - name of trigger function to execute on form submission
    */
@@ -164,9 +164,9 @@ class Workflow {
    */
   initializeRequestSheet_(triggerFunction) {
     const self = this,  // active spreadsheet
-          formSheet = self.ss.getSheets()[0];   // form submission sheet - assumes first sheet
+          formSheet = self.ss.getSheets()[0];   // form submission tab - assumes first location
     formSheet.activate();
-    // Get form submission sheet header row, update background color (yellow) and bold font
+    // Get form submission tab header row, update background color (yellow) and bold font
     formSheet.getRange(1, 1, 1, formSheet.getLastColumn())
       .setBackground('#fff2cc')
       .setFontWeight('bold');
@@ -358,7 +358,7 @@ class Workflow {
     templateDoc = ssFolder.getFilesByType(MimeType.GOOGLE_DOCS).next();
     requestForm = ssFolder.getFilesByType(MimeType.GOOGLE_FORMS).next();
     requestsFolder = ssFolder.getFolders().next();
-    // Add workflow asset URLs to ‘Config’ sheet 
+    // Add workflow asset URLs to ‘Config’ tab 
     self.configSheet.getRange(1, 2, 3).setValues([[requestForm.getUrl()], [templateDoc.getUrl()], [requestsFolder.getUrl()]]);
     // Set the workflow Form destination to the workflow Sheet
     FormApp.openById(requestForm.getId()).setDestination(FormApp.DestinationType.SPREADSHEET, self.ss.getId());
@@ -385,7 +385,7 @@ class Workflow {
   }
 
   /* 
-   * This method updates the selected request workflow range in the form submission sheet
+   * This method updates the selected request workflow range in the form submission tab
    * @param {number} row - selected request row number
    * @param {string[][]} vals - two-dimensional array of workflow field values to be written to selected row
    * @return {Workflow} this object for chaining
