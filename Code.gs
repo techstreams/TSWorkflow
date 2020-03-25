@@ -22,7 +22,7 @@
   */
 
 /* 
- * This function adds a 'Purchase Request Workflow' menu to the Workflow Sheet when opened
+ * This function adds a 'Purchase Request Workflow' menu to the workflow Sheet when opened
  */
 function onOpen() {
   const ui = SpreadsheetApp.getUi();  // Sheet UI
@@ -52,7 +52,7 @@ class Workflow {
   }
 
   /* 
-   * This static method populates the Workflow Sheet's 'Config' sheet with workflow 
+   * This static method populates the workflow Sheet's 'Config' tab with workflow 
    * asset URLs and associates the workflow Form destination with the workflow Sheet
    */
   static configure() {
@@ -95,7 +95,7 @@ class Workflow {
 
   /* 
    * This static method adds additional fields and formatting to the form submission sheet
-   * and setups the form submit trigger
+   * and sets up the form submit trigger
    * @param {string} triggerFunction - name of trigger function to execute on form submission
    */
   static initialize(triggerFunction = 'Workflow.generate') {
@@ -106,7 +106,7 @@ class Workflow {
 
   /*
    * This static method updates the purchase request document with status updates 
-   * from form submission sheet highlighted row and sends email notification
+   * from form submission tab highlighted row and sends email notification
    */
   static update() {
     const workflow = new Workflow();
@@ -130,7 +130,7 @@ class Workflow {
       // Update workflow request range 'Last Update' cell with formatted timestamp
       activeRowValues[0][3] = workflow.getFormattedDate_(date, "M/d/yyyy k:mm:ss");
       workflow.updateWorkflowFields_(activeRowRange.getRow(), activeRowValues);
-      // Generate notification email body and send to requester, supervisor and to Sheet owner
+      // Generate notification email body and send to requester, supervisor and Sheet owner
       email = `Purchase Request Status Update: <strong>${activeRowValues[0][1]}<\/strong><br><br>
       See request document <a href="${doc.getUrl()}">here<\/a>`;
       workflow.sendNotification_(recipients.join(','), `Updated Status: ${doc.getName()}`, email);
@@ -158,7 +158,7 @@ class Workflow {
   }
 
   /* 
-   * This method adds additional fields and formatting to the form submission sheet and setups the submit trigger
+   * This method adds additional fields and formatting to the form submission tab and sets up the submit trigger
    * @param {string} triggerFunction - name of trigger function to execute on form submission
    * @return {Workflow} this object for chaining
    */
@@ -166,7 +166,7 @@ class Workflow {
     const self = this,  // active spreadsheet
           formSheet = self.ss.getSheets()[0];   // form submission sheet - assumes first sheet
     formSheet.activate();
-    // Get form submission sheet header row, update background color (yellow) and fold font
+    // Get form submission sheet header row, update background color (yellow) and bold font
     formSheet.getRange(1, 1, 1, formSheet.getLastColumn())
       .setBackground('#fff2cc')
       .setFontWeight('bold');
@@ -196,7 +196,7 @@ class Workflow {
 
   /* 
    * This method formats a date using the Google Sheet timezone
-   * @param {Date} date - Javascript date object
+   * @param {Date} date - Javascript Date object
    * @param {string} format - string representing the desired date format
    * @return {string} formatted date string
    */
@@ -217,7 +217,7 @@ class Workflow {
     let supervisor;
     // Shift off header row
     employees.shift();
-    // Find requester who submitted the form request
+    // Find form submit requester
     viewers.requester = employees.filter(row => row[0] === requesterName)
                        .map((row) => ({ name: row[0], email: row[1], phone: row[2], supervisor: row[3] }))[0];
     viewers.emails = viewers.requester.email !== '' ? [viewers.requester.email] : [];
@@ -236,7 +236,7 @@ class Workflow {
   }
 
   /* 
-   * This method retrieves the workflow request range of selected row (if selection is valid)
+   * This method retrieves the workflow request range for selected row (if selection is valid)
    * If selection is invalid display a Sheet message
    * @return {Range} workflow fields range from active selection
    */
@@ -244,7 +244,7 @@ class Workflow {
     const self = this,
           activeSheet = self.ss.getActiveSheet();
     let activeRowRange = null, activeRange, activeRowNum;
-    // Ensure user is on form submission sheet - if not show an error and exit
+    // Ensure user is on form submission tab - if not show an error and exit
     if (activeSheet.getIndex() !== 1) {
       self.sendSSMsg_('Select sheet containing purchase requests.', 'Operation Not Valid on Sheet!');
       return activeRowRange;
@@ -295,7 +295,7 @@ class Workflow {
   }
 
   /* 
-   * This method replaces request document template markers with both values passed from form submission and other data
+   * This method replaces request document template markers with values passed from form submission and other data
    * @param {Document} doc - generated request document
    * @param {Object} requestVals - form submission fields
    * @param {Object} viewers - requester and supervisor information
@@ -344,7 +344,7 @@ class Workflow {
   }
 
   /* 
-   * This method populates the 'Config' sheet with workflow asset URLs 
+   * This method populates the 'Config' tab with workflow asset URLs 
    * and associates the workflow Form destination with the workflow Sheet
    * @return {Workflow} this object for chaining
    */
