@@ -64,10 +64,10 @@ function configure(){
  */
 function initialize() {
   var ss = SpreadsheetApp.getActiveSpreadsheet(),  // active spreadsheet
-        formSheet = ss.getSheets()[0],   // form submission tab - assumes first tab
+        formSheet = ss.getSheets()[0],   // form submission tab - assumes first location
         triggerFunction = 'generate';    // name of function for submit trigger
   formSheet.activate();
-  // Get form submission sheet header row, update background color (yellow) and bold font
+  // Get form submission tab header row, update background color (yellow) and bold font
   formSheet.getRange(1, 1, 1, formSheet.getLastColumn())
            .setBackground('#fff2cc')
            .setFontWeight('bold');
@@ -118,7 +118,7 @@ function generate(e) {
   if (viewers.emails.length > 0) {
     requestFile.addViewers(viewers.emails).setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.VIEW);
   }
-  // Update workflow request range in form submission sheet
+  // Update workflow request range in form submission tab
   lastupdate = Utilities.formatDate(date, ss.getSpreadsheetTimeZone(), "M/d/yyyy k:mm:ss");
   formSheet.getRange(e.range.getRow(), 1, 1, 4).setValues([[requestFile.getUrl(), 'New', '', lastupdate]]);
   // Generate notification email body and send to requester, supervisor and Sheet owner
@@ -136,7 +136,7 @@ function update() {
   var ss = SpreadsheetApp.getActiveSpreadsheet(),  // active spreadsheet
       configSheet = ss.getSheetByName('Config'),   // config tab
       employeeSheet = ss.getSheetByName('Employees'), // employees tab
-      formSheet = ss.getSheets()[0],   // form submission sheet - assumes first sheet
+      formSheet = ss.getSheets()[0],   // form submission tab - assumes first location
       activeRowRange, activeRowValues, email, date, doc, lastupdate, recipients;
   // Create and format date object for 'last update' timestamp
   date = new Date();
