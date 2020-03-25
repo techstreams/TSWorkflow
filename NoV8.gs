@@ -52,7 +52,7 @@ function configure(){
   templateDoc = ssFolder.getFilesByType(MimeType.GOOGLE_DOCS).next();
   requestForm = ssFolder.getFilesByType(MimeType.GOOGLE_FORMS).next();
   requestsFolder = ssFolder.getFolders().next();
-  // Add workflow asset URLs to ‘Config’ sheet 
+  // Add workflow asset URLs to ‘Config’ tab 
   configSheet.getRange(1, 2, 3).setValues([[requestForm.getUrl()], [templateDoc.getUrl()], [requestsFolder.getUrl()]]);
   // Set the workflow Form destination to the workflow Sheet
   FormApp.openById(requestForm.getId()).setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
@@ -60,14 +60,14 @@ function configure(){
 
 /* 
  * This function adds additional fields and formatting to the form submission tab
- * and setups the form submit trigger
+ * and sets up the form submit trigger
  */
 function initialize() {
   var ss = SpreadsheetApp.getActiveSpreadsheet(),  // active spreadsheet
-        formSheet = ss.getSheets()[0],   // form submission tab - assumes first tab
+        formSheet = ss.getSheets()[0],   // form submission tab - assumes first location
         triggerFunction = 'generate';    // name of function for submit trigger
   formSheet.activate();
-  // Get form submission sheet header row, update background color (yellow) and fold font
+  // Get form submission tab header row, update background color (yellow) and bold font
   formSheet.getRange(1, 1, 1, formSheet.getLastColumn())
            .setBackground('#fff2cc')
            .setFontWeight('bold');
@@ -118,10 +118,10 @@ function generate(e) {
   if (viewers.emails.length > 0) {
     requestFile.addViewers(viewers.emails).setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.VIEW);
   }
-  // Update workflow request range in form submission sheet
+  // Update workflow request range in form submission tab
   lastupdate = Utilities.formatDate(date, ss.getSpreadsheetTimeZone(), "M/d/yyyy k:mm:ss");
   formSheet.getRange(e.range.getRow(), 1, 1, 4).setValues([[requestFile.getUrl(), 'New', '', lastupdate]]);
-  // Generate notification email body and send to requester/supervisor/business owner
+  // Generate notification email body and send to requester, supervisor and Sheet owner
   email = Utilities.formatString('New Purchase Request from: <strong>%s</strong><br><br>See request document <a href="%s">here<\/a>', viewers.requester.name, doc.getUrl());
   viewers.emails.push(Session.getEffectiveUser().getEmail());
   GmailApp.sendEmail(viewers.emails, Utilities.formatString('New %s', doc.getName()), '', { htmlBody: email });
@@ -130,13 +130,13 @@ function generate(e) {
 
 /*
  * This function updates the purchase request document with status updates 
- * from form submission sheet highlighted row and sends email notification
+ * from form submission tab highlighted row and sends email notification
  */
 function update() {
   var ss = SpreadsheetApp.getActiveSpreadsheet(),  // active spreadsheet
       configSheet = ss.getSheetByName('Config'),   // config tab
       employeeSheet = ss.getSheetByName('Employees'), // employees tab
-      formSheet = ss.getSheets()[0],   // form submission sheet - assumes first sheet
+      formSheet = ss.getSheets()[0],   // form submission tab - assumes first location
       activeRowRange, activeRowValues, email, date, doc, lastupdate, recipients;
   // Create and format date object for 'last update' timestamp
   date = new Date();
@@ -156,7 +156,7 @@ function update() {
     // Update workflow request range 'Last Update' cell with formatted timestamp
     activeRowValues[0][3] = Utilities.formatDate(date, ss.getSpreadsheetTimeZone(), "M/d/yyyy k:mm:ss");
     formSheet.getRange(activeRowRange.getRow(), 1, 1, 4).setValues(activeRowValues);
-    // Generate notification email body and send to requester, supervisor and to Sheet owner
+    // Generate notification email body and send to requester, supervisor and Sheet owner
     email = Utilities.formatString('Purchase Request Status Update: <strong>%s</strong><br><br>See request document <a href="%s">here<\/a>', activeRowValues[0][1], doc.getUrl());
     GmailApp.sendEmail(recipients.join(','), Utilities.formatString('Updated Status: %s', doc.getName()), '', { htmlBody: email });
     // Display request update message in Sheet
@@ -221,7 +221,7 @@ function getViewers_(employeeSheet, requesterName) {
       supervisor;
   // Shift off header row
   employees.shift();
-  // Find requester who submitted the form request
+  // Find form submit requester
   viewers.requester = employees.filter(function(row) { return row[0] === requesterName})
                                .map(function(row) { return { name:row[0], email:row[1], phone:row[2], supervisor:row[3] }})[0];
   viewers.emails = viewers.requester.email !== '' ? [viewers.requester.email] : [];
@@ -241,7 +241,7 @@ function getViewers_(employeeSheet, requesterName) {
 
 
 /* 
- * This function retrieves the workflow request range of selected row (if selection is valid)
+ * This function retrieves the workflow request range for selected row (if selection is valid)
  * If selection is invalid display a Sheet message
  * @return {Range} workflow fields range from active selection
 */
@@ -250,7 +250,7 @@ function getWorkflowFields_() {
       activeSheet = ss.getActiveSheet(),  // active tab
       activeRowRange = null,  // active range
       activeRange, activeRowNum;
-  // Ensure user is on form submission sheet - if not show an error and exit
+  // Ensure user is on form submission rab - if not show an error and exit
   if (activeSheet.getIndex() !== 1) {
     ss.toast('Select sheet containing purchase requests.', 'Operation Not Valid on Sheet!');
     return activeRowRange;
@@ -275,7 +275,7 @@ function getWorkflowFields_() {
 }
 
 /* 
- * This function replaces request document template markers with both values passed from form submission and other data
+ * This function replaces request document template markers with values passed from form submission and other data
  * @param {Document} doc - generated request document
  * @param {Object} requestVals - form submission fields
  * @param {Object} viewers - requester and supervisor information
