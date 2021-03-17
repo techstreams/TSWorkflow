@@ -1,5 +1,13 @@
 # TSWorkflow
 
+*If you enjoy my [Google Workspace Apps Script](https://developers.google.com/apps-script) work, please consider buying me a cup of coffee!* 
+
+
+[![](https://techstreams.github.io/images/bmac.svg)](https://www.buymeacoffee.com/techstreams)
+
+---
+
+
 **TSWorkflow** contains the **[code](Code.gs)** for the [G Suite](https://gsuite.google.com/) workflow automation highlighted in my presentation given at **[SheetsCon-2020](https://sheetscon.com/)** - **"Automation with Apps Script"**.  
 
 <br>
